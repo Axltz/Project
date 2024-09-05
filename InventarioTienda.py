@@ -2,19 +2,15 @@
 import os
 
 Lista_Productos = []
-Nombres =  []
-Precios = []
-Stock = []
+Nombres =  [1,2,3]
+Precios = [1,2,3]
+Stock = [1,2,3]
 Lista_Productos.append(Nombres)
 Lista_Productos.append(Precios)
 Lista_Productos.append(Stock)
-
-def Ver_Productos():
-    for i, producto in enumerate(Lista_Productos, start=1):
-      Nombres, Stock, Precios = producto
-      print(f"{i}. Nombre: {Nombres}, Cantidad: {Stock}, Precio por unidad: ${Precios:.2f}")
-def Agregar_Productos():
-   print("Has seleccionado agregar productos.\n")
-   producto = input("Ingresa el nombre del producto: ")
-   Nombres.append(producto)
-   precio = input()
+def Mostrar_Productos():
+    print("Listado de productos")
+    for i, productos in enumerate(Lista_Productos, start=1):
+        Nombres, Precios, Stock = productos
+        print(f"{i}. {Nombres} - Precio por unidad: ${Precios:.2f}, Cantidad: {Stock} unidades")
+Mostrar_Productos()
