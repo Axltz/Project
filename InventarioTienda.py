@@ -3,7 +3,7 @@ import os
 
 Lista_Productos = []
 
-
+os.system("color 02")
 def Mostrar_Productos():
     print("Listado de productos")
     for i, producto in enumerate(Lista_Productos, start=1):
@@ -11,6 +11,7 @@ def Mostrar_Productos():
 def Agregar_Producto():
       while True:
         print("Has seleccionado agregar un producto.\n")
+        Mostrar_Productos()
         producto = input("Ingresa el nombre del producto: ")
         stock = int(input("Ingresa la cantidad a agregar: "))    
         precio = float(input("Ingresa el precio por unidad: "))
@@ -37,6 +38,7 @@ def Agregar_Producto():
         if seleccion == "no":
            print("Saliendo de la opción...")      
            break
+        os.system("cls")
 def Editar_Producto():
     while True:
         print("Has seleccionado editar el inventario. ")     
@@ -82,12 +84,31 @@ def Editar_Producto():
                 print("Opción no válida, intente de nuevo")
         if seleccion == "no":
          break
-
-
+        os.system("cls")
 def Eliminar_Producto():
-   print()
-
-
+  while True:
+    print("Has seleccionado eliminar producto")
+    print("¿Qué producto deseas eliminar?")
+    Mostrar_Productos()
+    seleccion = int(input()) - 1
+    del Lista_Productos[seleccion]
+    print("Eliminando producto...")
+    print("Aplicando cambios..")
+    print("Producto eliminado correctamente!")
+    print("Lista actualizada:\n")
+    Mostrar_Productos()
+    while True: 
+      print("Deseas eliminar algún otro? si/no")
+      seleccion = input()
+      if seleccion == "si":
+         break
+      elif seleccion == "no":
+         break
+      else:
+         print("Opción no valida, intenta otra vez.")
+         os.system("cls")
+    if seleccion == "no":
+       break
 
 while True: 
     print("Has ingresado al gestor del inventario\n")
