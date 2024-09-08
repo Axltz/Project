@@ -4,64 +4,92 @@ import os
 Lista_Productos = []
 
 os.system("color 02")
-def Gestor_Inventario():
+def Gestor_Inventario(): 
   while True: 
       print("Has ingresado al gestor del inventario\n")
       print("Por favor seleccione una opción:")
       print("\n\t1. Agregar producto.\n\t2. Editar producto existente.\n\t3. Eliminar producto.\n\t0. Salir\n")
       seleccion = int(input("Elección: "))
       if seleccion == 1:
+         os.system("cls")
          Agregar_Producto()
-         os.system('cls')
       elif seleccion == 2:
+         os.system("cls")
          Editar_Producto()
-         os.system('cls')
       elif seleccion == 3:
+         os.system("cls")         
          Eliminar_Producto()
-         os.system('cls') 
-      elif seleccion == 0:
-         os.system('cls')
-         break
+      elif seleccion == 0:  
+         confirm = input("¿Estás seguro de que deseas salir? (si/no): ").lower()
+         if confirm == "si":
+           os.system('cls')         
+           break
       else: print("Opcion no valida, ingresa una existente.")
 def Mostrar_Productos():
-    print("Listado de productos")
-    for i, producto in enumerate(Lista_Productos, start=1):
+    if not Lista_Productos:
+      print("No hay productos en el inventario!")
+    else:
+      print("Listado de productos")
+      for i, producto in enumerate(Lista_Productos, start=1):
         print(f"{i}. {producto['nombre']} - Precio por unidad: ${producto['precio']:.2f}, Cantidad: {producto['stock']} unidades")  
 def Agregar_Producto():
       while True:
         print("Has seleccionado agregar un producto.\n")
         Mostrar_Productos()
-        producto = input("Ingresa el nombre del producto: ")
-        stock = int(input("Ingresa la cantidad a agregar: "))    
-        precio = float(input("Ingresa el precio por unidad: "))
-        dic_producto = {
-        "nombre": producto,
-        "stock": stock,
-        "precio": precio} 
-        
-        Lista_Productos.append(dic_producto)
-        print("Actualizando inventario...\n")
-        print(f"Producto '{dic_producto['nombre']}' fue agregado exitosamente con {dic_producto['stock']} unidades en stock a un precio de ${dic_producto['precio']} por unidad.")
-
         while True:
-         print("Esta es la lista actualizada: ")
-         Mostrar_Productos()
-         seleccion = input("¿Deseas agregar algún otro producto? si/no\n")
-         if seleccion == "no":
-            print("Saliendo de la opción...")
-            break
-         elif seleccion == "si":
-            break
-         else:
-            print("Opcion no valida, intente de nuevo")
-        if seleccion == "no":
-           print("Saliendo de la opción...")      
-           break
-        os.system("cls")
+          producto = input("Ingresa el nombre del producto: ")  
+          while True:
+           try:
+            precio = float(input("Ingresa el precio por unidad: "))
+            if precio > 0:
+              break
+            else:
+              print("El precio debe ser mayor a 0.")  
+           except ValueError:
+              print("Debes ingresar un número válido.") 
+                                 
+          while True:
+             try:
+              stock = int(input("Ingresa la cantidad a agregar: "))  
+              if stock > 0:
+                break
+              else:
+                print("El stock debe ser mayor a 0.")  
+             except ValueError:
+                print("Debes ingresar un número válido.") 
+          dic_producto = {
+          "nombre": producto,
+          "stock": stock,
+          "precio": precio} 
+            
+        
+          Lista_Productos.append(dic_producto)
+          print("Actualizando inventario...\n")
+          print(f"Producto '{dic_producto['nombre']}' fue agregado exitosamente con {dic_producto['stock']} unidades en stock a un precio de ${dic_producto['precio']} por unidad.")
+
+          while True:
+           print("Esta es la lista actualizada: ")
+           Mostrar_Productos()
+           seleccion = input("¿Deseas agregar algún otro producto? si/no\n").lower()
+           if seleccion == "no":
+              print("Saliendo de la opción...")
+              break
+           elif seleccion == "si":
+              break
+           else:
+              print("Opcion no valida, intente de nuevo")
+          if seleccion == "no":   
+             break
+           
+        
+          os.system("cls")
 def Editar_Producto():
     while True:
         print("Has seleccionado editar el inventario. ")     
         print("¿Qué producto deseas editar?")
+        if not Lista_Productos:
+           print("Error, no hay productos en el inventario, saliendo de la opción...")
+           break
         Mostrar_Productos()
         seleccion = int(input("Elección: ")) -1
         
@@ -92,18 +120,18 @@ def Editar_Producto():
         print(f"Producto '{producto['nombre']}' fue editado exitosamente con {producto['stock']} unidades en stock a un precio de ${producto['precio']} por unidad.")
 
         while True:
-            print("Esta es la lista actualizada: ")
-            Mostrar_Productos()
-            seleccion = input("¿Deseas editar algún otro producto? si/no\n")
-            if seleccion == "no":
-                break
-            elif seleccion == "si":
-                break
-            else:
-                print("Opción no válida, intente de nuevo")
+          print("Esta es la lista actualizada: ")
+          Mostrar_Productos()
+          seleccion = input("¿Deseas editar algún otro producto? si/no\n").lower()
+          if seleccion == "no":
+              break
+          elif seleccion == "si":
+              break
+          else:
+              print("Opción no válida, intente de nuevo")
         if seleccion == "no":
-         break
-        os.system("cls")
+         os.system("cls")
+         break        
 def Eliminar_Producto():
   while True:
     print("Has seleccionado eliminar producto")
@@ -149,6 +177,9 @@ while True:
        print("Opción no valida, selecciona una opción existente!")
 
   if seleccion == 0:
+     confirm = input("¿Estás seguro de que deseas salir? (si/no): ").lower()
+     if confirm == "si":
+        os.system('cls')
      break
 
 
