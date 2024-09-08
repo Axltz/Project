@@ -4,6 +4,25 @@ import os
 Lista_Productos = []
 
 os.system("color 02")
+def Gestor_Inventario():
+  while True: 
+      print("Has ingresado al gestor del inventario\n")
+      print("Por favor seleccione una opción:")
+      print("\n\t1. Agregar producto.\n\t2. Editar producto existente.\n\t3. Eliminar producto.\n\t0. Salir\n")
+      seleccion = int(input("Elección: "))
+      if seleccion == 1:
+         Agregar_Producto()
+         os.system('cls')
+      elif seleccion == 2:
+         Editar_Producto()
+         os.system('cls')
+      elif seleccion == 3:
+         Eliminar_Producto()
+         os.system('cls') 
+      elif seleccion == 0:
+         os.system('cls')
+         break
+      else: print("Opcion no valida, ingresa una existente.")
 def Mostrar_Productos():
     print("Listado de productos")
     for i, producto in enumerate(Lista_Productos, start=1):
@@ -44,7 +63,7 @@ def Editar_Producto():
         print("Has seleccionado editar el inventario. ")     
         print("¿Qué producto deseas editar?")
         Mostrar_Productos()
-        seleccion = int(input("Selección: ")) -1
+        seleccion = int(input("Elección: ")) -1
         
         if seleccion < 0 or seleccion >= len(Lista_Productos):
             print("Selección inválida.")
@@ -90,7 +109,7 @@ def Eliminar_Producto():
     print("Has seleccionado eliminar producto")
     print("¿Qué producto deseas eliminar?")
     Mostrar_Productos()
-    seleccion = int(input()) - 1
+    seleccion = int(input("Elección: ")) - 1
     del Lista_Productos[seleccion]
     print("Eliminando producto...")
     print("Aplicando cambios..")
@@ -110,21 +129,26 @@ def Eliminar_Producto():
     if seleccion == "no":
        break
 
-while True: 
-    print("Has ingresado al gestor del inventario\n")
-    print("Por favor seleccione una opción:")
-    print("\n\t1. Agregar producto.\n\t2. Editar producto existente.\n\t3. Eliminar producto.\n\t0. Salir\n")
-    seleccion = int(input())
+while True:
+  print("***************************")
+  print("*-Gestor de negocio v1.0.-*")
+  print("***************************")
+
+  print("Bienvenido, seleccione una opción por favor.")
+  print("\n\t1. Gestor del inventario.\n\t0. Salir del programa")
+  while True:
+    seleccion = int(input("Elección: "))
     if seleccion == 1:
-       Agregar_Producto()
-       os.system('cls')
-    elif seleccion == 2:
-       Editar_Producto()
-       os.system('cls')
-    elif seleccion == 3:
-       Eliminar_Producto()
-       os.system('cls') 
-    elif seleccion == 0:
-       os.system('cls')
+       os.system("cls")
+       Gestor_Inventario()
        break
-    else: print("Opcion no valida, ingresa una existente.")
+    elif seleccion == 0:
+       print("Saliendo del programa...")
+       break
+    else: 
+       print("Opción no valida, selecciona una opción existente!")
+
+  if seleccion == 0:
+     break
+
+
