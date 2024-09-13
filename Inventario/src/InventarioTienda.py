@@ -11,7 +11,7 @@ def Mostrar_Main_Menu():
     print("***************************")
 
     print("Bienvenido, seleccione una opción por favor.")
-    print("\n\t1. Gestor del inventario.\n\t2. Mostrar inventario\n\t0. Salir del programa")
+    print("\n\t1. Gestor del inventario.\n\t2. Visor del inventario\n\t0. Salir del programa")
     while True:
       seleccion = input("Elección: ")
       if seleccion == "1":
@@ -29,7 +29,7 @@ def Mostrar_Main_Menu():
          print("Opción no valida, selecciona una opción existente!")
     
     if seleccion == "0":
-      if confirmar_salida("¿Estás seguro de que deseas salir? (si/no): "):
+      if confirmar_salida("¿Estás seguro de que deseas salir del programa? (si/no): "):
          print("Saliendo del programa...")
          break
       else: os.system("cls")
@@ -65,11 +65,52 @@ def Mostrar_Productos():
       for i, producto in enumerate(Lista_Productos, start=1):
         print(f"{i}. {producto['nombre']} - Precio por unidad: ${producto['precio']:.2f}, Cantidad: {producto['stock']} unidades")  
 def inventario_productos():
-   print()
+   while True:
+      print("Has ingresado al visor del inventario\n")
+      print("Por favor seleccione una opción:")
+      print("\n\t1. Mostrar inventario.\n\t2. Busqueda de inventario.\n\t0. Salir de la opción")
+      seleccion = input("Elección: ")
+      if seleccion == "1":
+          os.system("cls")
+          while True:
+            Mostrar_Productos()
+            if confirmar_salida("¿Deseas salir?: "):
+               print("Saliendo...")
+               break
+            else: os.system("cls")
+            os.system("cls")
+      if seleccion == "2":
+          while True:
+            os.system("cls")
+            Buscar_Producto()
+            if confirmar_salida("¿Deseas salir?: "):
+               print("Saliendo...")
+               os.system("cls")
+               break
+            else: os.system("cls")
+            os.system("cls")
+      if seleccion == "0":
+          if confirmar_salida("¿Deseas salir del visor del inventario? (si/no): "):
+             print("Saliendo...")
+             break
+          else: os.system("cls")
+          os.system("cls")
 def Buscar_Producto():
-   print()
-
-
+   Resultados = []
+   while True:
+      print("¿Qué producto deseas buscar?: ")
+      busqueda = input().strip().lower()
+      for producto in Lista_Productos:
+         if busqueda in producto['nombre'].strip().lower():
+            Resultados.append(producto)
+      if Resultados:
+         print("Productos encontrados : ")
+         for producto in Resultados:
+            print(f"{producto['nombre']} - Precio por unidad: ${producto['precio']} - Stock: {producto['stock']} unidades")
+         break
+      else:
+         print("Producto no encontrado.")
+         
 def Agregar_Producto():    
         while True:
           print("Has seleccionado agregar un producto.\n")
@@ -124,12 +165,8 @@ def Editar_Producto():
            print("Error, no hay productos en el inventario, saliendo de la opción...")
            break
         Mostrar_Productos()
-        seleccion = int(input("Elección: ")) -1
         
-        if seleccion < 0 or seleccion >= len(Lista_Productos):
-            print("Selección inválida.")
-            continue
-        
+        seleccion = validar_seleccion_producto("¿Qué producto deseas editar? ", Lista_Productos)
         producto = Lista_Productos[seleccion]  
         
         print("¿Qué deseas hacer? \n")
@@ -161,9 +198,7 @@ def Eliminar_Producto():
     print("Has seleccionado eliminar producto")
     print("¿Qué producto deseas eliminar?")
     Mostrar_Productos()
-    seleccion = int(input("Elección: ")) - 1
-    if seleccion < 0 or seleccion >= len(Lista_Productos):
-       print("Opción no existente, ingresa una opción valida.")
+    seleccion = validar_seleccion_producto("¿Qué producto deseas eliminar? ", Lista_Productos)
 
     if confirmar_accion(f"¿Estas seguro de eliminar el producto {Lista_Productos[seleccion]['nombre']}? (si/no): "):
       del Lista_Productos[seleccion]
@@ -206,3 +241,4 @@ def confirmar_accion(mensaje):
             print("Opción no válida, ingresa 'si' o 'no'.")
 if __name__ == "__main__":
    Mostrar_Main_Menu()
+
