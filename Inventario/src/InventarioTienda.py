@@ -3,7 +3,7 @@ import os
 
 Lista_Productos = []
 
-
+#módulo de menus
 def Mostrar_Main_Menu():
   while True:
     print("***************************")
@@ -11,7 +11,7 @@ def Mostrar_Main_Menu():
     print("***************************")
 
     print("Bienvenido, seleccione una opción por favor.")
-    print("\n\t1. Gestor del inventario.\n\t2. Visor del inventario\n\t0. Salir del programa")
+    print("\n\t1. Gestor del inventario.\n\t2. Visor del inventario\n\t3. Ventas\n\t0. Salir del programa")
     while True:
       seleccion = input("Elección: ")
       if seleccion == "1":
@@ -21,6 +21,10 @@ def Mostrar_Main_Menu():
       if seleccion == "2":
          os.system("cls")
          inventario_productos()    
+         break
+      if seleccion == "3":
+         os.system("cls")
+         Menu_ventas()
          break
          
       elif seleccion == "0":
@@ -56,19 +60,31 @@ def Menu_Gestor_Inventario():
             print("Saliendo de la opción...")
             os.system("cls")
             break
-         os.system("cls")
+         os.system("cls")       
 def Mostrar_Productos():
     if not Lista_Productos:
       print("No hay productos en el inventario!")
     else:
       print("Listado de productos")
       for i, producto in enumerate(Lista_Productos, start=1):
-        print(f"{i}. {producto['nombre']} - Precio por unidad: ${producto['precio']:.2f}, Cantidad: {producto['stock']} unidades")  
+        print(f"{i}. {producto['nombre']} - Precio por unidad: ${producto['precio']:.2f}, Cantidad: {producto['stock']} unidades") 
+def Menu_ventas():
+   while True: 
+      print("Has ingresado al menú de ventas y stock.\n")
+      print("Por favor seleccione una opción:")
+      print("\n\t1. Realizar venta.\n\t2. Detectar stock bajo.\n\t3. Reabastecer stock.\n\t0. Salir\n")
+      seleccion = input("Elección: ")
+      if seleccion == "1":
+         os.system("cls") 
+         Venta()
+         os.system("cls")
+
+#módulo de visor del inventario
 def inventario_productos():
    while True:
       print("Has ingresado al visor del inventario\n")
       print("Por favor seleccione una opción:")
-      print("\n\t1. Mostrar inventario.\n\t2. Busqueda de inventario.\n\t0. Salir de la opción")
+      print("\n\t1. Mostrar inventario.\n\t2. Busqueda de inventario.\n\t3. Mostrar productos con stock bajo.\n\t0. Salir de la opción")
       seleccion = input("Elección: ")
       if seleccion == "1":
           os.system("cls")
@@ -86,6 +102,15 @@ def inventario_productos():
             if confirmar_salida("¿Deseas salir?: "):
                print("Saliendo...")
                os.system("cls")
+               break
+            else: os.system("cls")
+            os.system("cls")
+      if seleccion == "3":
+          os.system("cls")
+          while True:
+            Low_Stock(umbral = 5)
+            if confirmar_salida("¿Deseas salir?: "):
+               print("Saliendo...")
                break
             else: os.system("cls")
             os.system("cls")
@@ -110,7 +135,16 @@ def Buscar_Producto():
          break
       else:
          print("Producto no encontrado.")
-         
+def Low_Stock(umbral = 5):
+     print("Los siguientes productos tienen 5 o menos unidades en stock: ")
+     bajo_stock = [producto for producto in Lista_Productos if producto['stock'] < umbral]        
+     if bajo_stock:
+        print("Productos con stock bajo:")
+        for producto in bajo_stock:
+            print(f"Nombre: {producto['nombre']}, Stock: {producto['stock']}")
+     else:
+        print("No hay productos con stock bajo.")
+#Módulo de edición de productos         
 def Agregar_Producto():    
         while True:
           print("Has seleccionado agregar un producto.\n")
@@ -136,27 +170,6 @@ def Agregar_Producto():
               os.system("cls")
               break
           os.system("cls")          
-def validar_precio():
-   while True:
-           try:
-             precio = float(input("Ingresa el precio por unidad: "))
-             if precio > 0:
-               return precio
-             else:
-               print("El precio debe ser mayor a 0.")  
-           except ValueError:
-              print("Debes ingresar un número válido.") 
-def validar_stock():
-   while True:
-             try:
-              stock = int(input("Ingresa la cantidad a agregar: "))  
-              if stock > 0:
-                return stock
-              else:
-                print("El stock debe ser mayor a 0.")  
-             except ValueError:
-                print("Debes ingresar un número válido.") 
-
 def Editar_Producto():
     while True:
         print("Has seleccionado editar el inventario. ")     
@@ -200,7 +213,7 @@ def Eliminar_Producto():
     Mostrar_Productos()
     seleccion = validar_seleccion_producto("¿Qué producto deseas eliminar? ", Lista_Productos)
 
-    if confirmar_accion(f"¿Estas seguro de eliminar el producto {Lista_Productos[seleccion]['nombre']}? (si/no): "):
+    if confirmar_accion(f"¿Estas seguro de eliminar el producto '{Lista_Productos[seleccion]['nombre']}'? (si/no): "):
       del Lista_Productos[seleccion]
       print("Eliminando producto...")
       print("Aplicando cambios..")
@@ -211,6 +224,63 @@ def Eliminar_Producto():
         break
     os.system("cls")
 
+#módulo de ventas
+def Venta():
+   while True:
+      print("Has ingresado al apartado de ventas.\n")
+      print("Esta es la lista del inventario: ")
+      Mostrar_Productos()
+      while True:
+        print("¿Qué producto deseas vender?: ")
+        nombre = input()
+        if not validar_producto(nombre):
+          print("Producto inexistente!")
+          break
+        print("¿Cuanta cantidad se venderá?: ")
+        stock = int(input())
+        Hacer_venta(nombre, stock)
+        if not confirmar_accion("¿Deseas vender otro producto? (si/no): "):
+           break
+        else: os.system("cls")
+      if confirmar_salida("¿Deseas salir de la opción? (si/no): "):
+         break
+def Hacer_venta(nombre, stock):
+   for producto in Lista_Productos:
+      if producto['nombre'] == nombre:
+         if producto['stock'] >= stock:
+            producto['stock'] -= stock
+            total_venta = producto['precio'] * stock
+            print(f"Total a pagar: ${total_venta}")
+         else:
+            print("Stock insuficiente para realizar venta!")
+
+
+#módulo de validaciones y confirmaciones
+def validar_producto(nombre):
+    for producto in Lista_Productos:
+        if producto['nombre'].lower() == nombre.lower():
+            return producto 
+        
+def validar_precio():
+   while True:
+           try:
+             precio = float(input("Ingresa el precio por unidad: "))
+             if precio > 0:
+               return precio
+             else:
+               print("El precio debe ser mayor a 0.")  
+           except ValueError:
+              print("Debes ingresar un número válido.") 
+def validar_stock():
+   while True:
+             try:
+              stock = int(input("Ingresa la cantidad a agregar: "))  
+              if stock > 0:
+                return stock
+              else:
+                print("El stock debe ser mayor a 0.")  
+             except ValueError:
+                print("Debes ingresar un número válido.") 
 def validar_seleccion_producto(mensaje, lista):
     while True:
         try:
@@ -223,7 +293,7 @@ def validar_seleccion_producto(mensaje, lista):
             print("Debe ingresar un número válido.")
 def confirmar_salida(mensaje):
     while True:
-        confirmacion = input(mensaje).lower()
+        confirmacion = input(mensaje).strip().lower()
         if confirmacion == "si":
             return True
         elif confirmacion == "no":
@@ -232,13 +302,16 @@ def confirmar_salida(mensaje):
             print("Opción no válida, ingresa 'si' o 'no'.")
 def confirmar_accion(mensaje):
     while True:
-        confirmacion = input(mensaje).lower()
+        confirmacion = input(mensaje).strip().lower()
         if confirmacion == "si":
             return True
         elif confirmacion == "no":
             return False
         else:
             print("Opción no válida, ingresa 'si' o 'no'.")
+
+
+
 if __name__ == "__main__":
    Mostrar_Main_Menu()
 
