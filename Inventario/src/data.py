@@ -1,4 +1,4 @@
-# Variables
+# Variables globales
 Lista_Productos = []
 Proveedores = []
 Ventas  = []

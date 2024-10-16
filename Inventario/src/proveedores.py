@@ -1,5 +1,6 @@
 from data import Proveedores
 from validaciones import *
+from user import *
 import os
 
 def Menu_proveedores():
@@ -52,6 +53,9 @@ def Mostrar_Proveedores():
         print(f"{i}. Nombre del proveedor: {proveedor['nombre']} - telefono: {proveedor['contacto']} - producto que ofrece: {proveedor['producto']}.") 
 def Agregar_Proveedor():
    while True:
+    if not login_admin():
+          print("La autorización falló. No se puede continuar sin autorización.")
+          break
     print("Has seleccionado agregar un proveedor.\n")
     Mostrar_Proveedores()
     nombre_proveedor = input("Ingresa el nombre del proveedor: ")  
@@ -77,6 +81,9 @@ def Agregar_Proveedor():
    os.system('cls' if os.name == 'nt' else 'clear')
 def Editar_Proveedor():
    while True:
+      if not login_admin():
+          print("La autorización falló. No se puede continuar sin autorización.")
+          break
       print("Has seleccionado editar proveedores. ")     
       print("¿Qué producto deseas editar?")
       if not Proveedores:
@@ -108,11 +115,14 @@ def Editar_Proveedor():
       print(f"Proveedor '{proveedor['nombre']}' fue editado exitosamente.")     
       print("Esta es la lista de proveedores actualizada: ")
       Mostrar_Proveedores()
-      if not confirmar_accion("¿Deseas editar algún otro proveedor? "):
+      if not confirmar_accion("¿Deseas editar algún otro proveedor? (si/no)"):
           break
       os.system('cls' if os.name == 'nt' else 'clear')
 def Eliminar_Proveedor():
   while True:
+    if not login_admin():
+          print("La autorización falló. No se puede continuar sin autorización.")
+          break
     print("Has seleccionado eliminar proveedor")
     Mostrar_Proveedores()
     seleccion = validar_seleccion("¿Qué proveedor deseas eliminar? ", Proveedores)

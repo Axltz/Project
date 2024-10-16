@@ -1,6 +1,7 @@
 import os
 from validaciones import *
 from data import Lista_Productos
+from user import *
 def Menu_Inventario():
    while True:
       print("Has ingresado al visor del inventario\n")
@@ -92,6 +93,8 @@ def Low_Stock(umbral=5):
         print("No hay productos con stock bajo.")
 def Reabastecer_Producto():
    while True:
+     if not login_admin():
+             break
      print("Has seleccionado 'reabastecer stock' de un producto")
      nombre = input("¿Qué producto deseas reabastecer? (escribe su nombre): ")
      producto = validar_producto(nombre)
@@ -111,6 +114,8 @@ def re_stock(producto, stock):
     print(f"Stock del producto actualizado, nuevo stock: {producto['stock']}")
 def Estadisticas_Stock():
    while True:
+     if not login_admin():
+        break
      total_productos = len(Lista_Productos)
      total_stock = sum(producto['stock'] for producto in Lista_Productos)
      print(f"Total de productos: {total_productos}")

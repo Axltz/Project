@@ -1,7 +1,8 @@
 from data import Lista_Productos, Ventas, Ingresos_totales
 from validaciones import *
 from visor_inventario import Mostrar_Productos
-import os
+from user import *
+
 
 def Menu_ventas():
    while True: 
@@ -10,19 +11,13 @@ def Menu_ventas():
       print("\n\t1. Realizar venta.\n\t2. Descuentos\n\t3. Reporte de ventas\n\t0. Salir\n")
       seleccion = input("Elección: ")
       if seleccion == "1":
-         os.system('cls' if os.name == 'nt' else 'clear')
          Venta()
-         os.system('cls' if os.name == 'nt' else 'clear')
       if seleccion == "3":
-         os.system('cls' if os.name == 'nt' else 'clear')
          Reporte_Ventas()
-         os.system('cls' if os.name == 'nt' else 'clear')
       if seleccion == "0":
           if confirmar_salida("¿Deseas salir del visor del inventario? (si/no): "):
              print("Saliendo...")
-             break
-          else: os.system('cls' if os.name == 'nt' else 'clear')
-          os.system('cls' if os.name == 'nt' else 'clear')
+             break        
 def Venta():
     while True:
         print("Has ingresado al apartado de ventas.\n")
@@ -30,17 +25,18 @@ def Venta():
         while True:
             print("¿Qué producto deseas vender? (ingresa su nombre): ")
             Mostrar_Productos()
+            if not Lista_Productos:
+                if confirmar_salida("¿Deseas salir de la opción? (si/no): "):
+                    break
             nombre = input()
             if not validar_producto(nombre):
-                print("Producto inexistente!")
+                print("Producto inexistente!") 
                 continue  
             print("¿Cuánta cantidad se venderá?: ")
             stock = int(input())
             Hacer_venta(nombre, stock) 
             if not confirmar_accion("¿Deseas vender otro producto? (si/no): "):
                 break  
-            else:
-                os.system('cls' if os.name == 'nt' else 'clear')
         if confirmar_salida("¿Deseas salir de la opción? (si/no): "):
             break  
 def Hacer_venta(nombre, stock):
@@ -69,6 +65,9 @@ def Hacer_venta(nombre, stock):
                 print("Cancelando la operación...")
 def Reporte_Ventas():
    while True:
+     if not login_admin():
+          print("La autorización falló. No se puede continuar sin autorización.")
+          break
      print("Has seleccionado ver el reporte de ventas.")
      if not Ventas:
         print("No hay ventas aún!")
